@@ -1,5 +1,8 @@
-import { useState } from "react";
-import { Upload, Cloud, CheckCircle2, Sparkles } from "lucide-react";
+import dogOne from "@/assets/dog1.webp";
+import dogTwo from "@/assets/dog2.webp";
+import kidOne from "@/assets/kid-1.webp";
+import kidTwo from "@/assets/kid-2.webp";
+import Sidebar from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,320 +13,379 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import Sidebar from "@/components/Sidebar";
+import { cn } from "@/lib/utils";
+import {
+  CloudUpload,
+  Crown,
+  Diamond,
+  FileImage,
+  FileText,
+  Info,
+  NotebookPen,
+  Plus,
+  Sparkles,
+  Upload,
+  X,
+} from "lucide-react";
+import { useState } from "react";
+
+const steps = [
+  "Basic Details",
+  "Upload Photos",
+  "Reference Pages",
+  "Correction Notes",
+  "Review & Generate",
+];
+
+const uploadCards = [
+  {
+    id: "kid-one",
+    label: "Kid One",
+    image: kidOne,
+    cardClassName:
+      "border-[#d9e8ff] bg-[linear-gradient(180deg,#f8fbff_0%,#ffffff_100%)]",
+    avatarClassName: "bg-[linear-gradient(180deg,#edf5ff_0%,#ffffff_100%)]",
+  },
+  {
+    id: "kid-two",
+    label: "Kid Two",
+    image: kidTwo,
+    cardClassName:
+      "border-[#f5d8eb] bg-[linear-gradient(180deg,#fff7fb_0%,#ffffff_100%)]",
+    avatarClassName: "bg-[linear-gradient(180deg,#fff0f7_0%,#ffffff_100%)]",
+  },
+  {
+    id: "dog-one",
+    label: "Dog One",
+    image: dogOne,
+    cardClassName:
+      "border-[#f9e6c7] bg-[linear-gradient(180deg,#fffaf0_0%,#ffffff_100%)]",
+    avatarClassName: "bg-[linear-gradient(180deg,#fff5df_0%,#ffffff_100%)]",
+  },
+  {
+    id: "dog-two",
+    label: "Dog Two",
+    image: dogTwo,
+    cardClassName:
+      "border-[#d8f0e5] bg-[linear-gradient(180deg,#f5fffb_0%,#ffffff_100%)]",
+    avatarClassName: "bg-[linear-gradient(180deg,#ebfaf3_0%,#ffffff_100%)]",
+  },
+];
+
+const referencePages = [
+  {
+    id: "page-1",
+    image: kidOne,
+    className:
+      "border-[#dbe7ff] bg-[radial-gradient(circle_at_top,#d3ebff_0%,#91bfff_42%,#76a0f2_100%)]",
+    imageClassName: "h-[88%] w-auto object-contain object-bottom",
+  },
+  {
+    id: "page-2",
+    image: dogOne,
+    className:
+      "border-[#f6e2ba] bg-[radial-gradient(circle_at_top,#fde8b5_0%,#fac06c_35%,#86b9ee_100%)]",
+    imageClassName: "h-[88%] w-auto object-contain object-bottom",
+  },
+  {
+    id: "page-3",
+    image: kidTwo,
+    className:
+      "border-[#d9d7ff] bg-[radial-gradient(circle_at_top,#313785_0%,#5860b7_38%,#92a6ff_100%)]",
+    imageClassName: "h-[90%] w-auto object-contain object-bottom",
+  },
+  {
+    id: "page-4",
+    image: dogTwo,
+    className:
+      "border-[#ddeaff] bg-[radial-gradient(circle_at_top,#d0f0ff_0%,#8dd3ff_38%,#78b2ff_100%)]",
+    imageClassName: "h-[88%] w-auto object-contain object-bottom",
+  },
+  {
+    id: "page-5",
+    image: kidOne,
+    className:
+      "border-[#e9e1c5] bg-[radial-gradient(circle_at_top,#dff0c9_0%,#9bc37e_45%,#577547_100%)]",
+    imageClassName: "h-[88%] w-auto object-contain object-bottom",
+  },
+  {
+    id: "page-6",
+    image: kidTwo,
+    className:
+      "border-[#f3d8df] bg-[radial-gradient(circle_at_top,#ffeff5_0%,#f3c0d5_40%,#aa73c8_100%)]",
+    imageClassName: "h-[88%] w-auto object-contain object-bottom",
+  },
+];
 
 export default function NewBatchRun() {
   const [orderName, setOrderName] = useState("");
-  const [imageQuality, setImageQuality] = useState("ultra-hd");
-  const [personalizationModel, setPersonalizationModel] = useState("chatgpt-4");
-  const [coloringModel, setColoringModel] = useState("flux-kortext");
-  const [uploadedFiles, setUploadedFiles] = useState({
-    kidOne: false,
-    kidTwo: false,
-    dogOne: false,
-    dogTwo: false,
-  });
-  const [referencePages, setReferencePages] = useState(0);
+  const [imageQuality, setImageQuality] = useState("high");
+  const [modelSelection, setModelSelection] = useState("premium");
   const [correctionNotes, setCorrectionNotes] = useState("");
-
-  const handleFileUpload = (fileType: string) => {
-    setUploadedFiles((prev) => ({
-      ...prev,
-      [fileType]: true,
-    }));
-  };
 
   const handleGenerateClick = () => {
     if (!orderName.trim()) {
-      alert("Please enter an order name");
+      window.alert("Please enter an order name before generating.");
       return;
     }
-    if (referencePages === 0) {
-      alert("Please select at least one reference page");
-      return;
-    }
-    alert("Starting generation with order: " + orderName);
+
+    window.alert(`Generating pages for "${orderName}".`);
   };
 
-  const steps = [
-    { number: 1, label: "Basic details" },
-    { number: 2, label: "Upload Photos" },
-    { number: 3, label: "Reference Pages" },
-    { number: 4, label: "Correction Notes" },
-    { number: 5, label: "Review & Generate" },
-  ];
-
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
+    <div className="min-h-screen bg-[linear-gradient(135deg,#f8f2ff_0%,#fbfbff_42%,#fffdf7_100%)] p-2 sm:p-4 lg:p-5">
+      <div className="mx-auto flex max-w-[1680px] flex-col gap-3 lg:flex-row lg:gap-4">
+        <Sidebar />
 
-      <div className="flex-1 overflow-auto">
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-          <div className="max-w-7xl mx-auto px-8 py-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              New batch run
+        <main className="min-w-0 flex-1 rounded-[28px] border border-white/85 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,255,255,0.78))] p-4 shadow-[0_18px_56px_rgba(110,88,209,0.08)] backdrop-blur-xl sm:p-6 lg:p-7">
+          <header>
+            <h1 className="text-[2.25rem] font-extrabold tracking-[-0.04em] text-[#1d174b] sm:text-[2.9rem]">
+              New Batch Run
             </h1>
-            <p className="text-gray-600">
-              Configure, upload photos, pick reference pages, then generate.
-            </p>
-          </div>
-        </div>
+          </header>
 
-        {/* Progress Steps */}
-        <div className="bg-white border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-8 py-6">
-            <div className="flex items-center justify-between">
-              {steps.map((step, index) => (
-                <div key={step.number} className="flex items-center flex-1">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all ${
-                        step.number === 1
-                          ? "bg-purple-600 text-white shadow-lg shadow-purple-200"
-                          : "bg-gray-200 text-gray-600"
-                      }`}
+          <section className="mt-5 grid gap-4 sm:grid-cols-5 sm:gap-3">
+            {steps.map((step, index) => {
+              const isActive = index === 0;
+
+              return (
+                <div key={step} className="relative">
+                  {index < steps.length - 1 ? (
+                    <div className="absolute left-[calc(50%+1.35rem)] right-[-50%] top-[1.05rem] hidden h-px bg-[#d8d2e8] sm:block" />
+                  ) : null}
+                  <div className="flex items-center gap-3 sm:flex-col sm:items-center sm:gap-0">
+                    <div className="flex items-center sm:justify-center">
+                      <div
+                        className={cn(
+                          "flex h-[2.15rem] w-[2.15rem] shrink-0 items-center justify-center rounded-full border text-xs font-bold",
+                          isActive
+                            ? "border-[#7244f2] bg-[linear-gradient(135deg,#7346f3_0%,#9b61ff_100%)] text-white shadow-[0_10px_22px_rgba(120,79,244,0.24)]"
+                            : "border-[#d9d3eb] bg-white text-[#30275b]"
+                        )}
+                      >
+                        {index + 1}
+                      </div>
+                    </div>
+                    <p
+                      className={cn(
+                        "text-[0.82rem] font-medium sm:mt-2.5 sm:text-center",
+                        isActive ? "text-[#6b3ff0]" : "text-[#6c648d]"
+                      )}
                     >
-                      {step.number}
-                    </div>
-                    <span className="text-xs font-medium text-gray-600 mt-2 text-center">
-                      {step.label}
-                    </span>
+                      {step}
+                    </p>
                   </div>
-                  {index < steps.length - 1 && (
-                    <div
-                      className={`flex-1 h-1 mx-3 rounded-full transition-all ${
-                        step.number < 1 ? "bg-purple-600" : "bg-gray-200"
-                      }`}
-                    />
-                  )}
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
+              );
+            })}
+          </section>
 
-        {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-8 py-8">
-          {/* Basic Details Section */}
-          <section className="mb-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-semibold text-sm">
-                1
+          <section className="mt-6 rounded-[24px] border border-[#ebe5f8] bg-white/86 p-4 shadow-[0_12px_26px_rgba(60,45,110,0.05)] sm:p-5">
+            <div className="mb-4 flex items-center gap-3 text-[#231951]">
+              <div className="flex h-8 w-8 items-center justify-center rounded-[10px] border border-[#d8c9fb] bg-[#f7f1ff] text-[#7044ee]">
+                <FileText className="h-4 w-4" />
               </div>
-              <h2 className="text-xl font-bold text-gray-900">Basic details</h2>
+              <h2 className="text-[1.35rem] font-bold tracking-[-0.03em]">
+                Basic Details
+              </h2>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-gray-200 space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Order name
+            <div className="grid gap-3 xl:grid-cols-3">
+              <div className="space-y-2">
+                <label className="text-[0.82rem] font-semibold text-[#2a2156]">
+                  Order Name
                 </label>
-                <Input
-                  placeholder="Enter order name"
-                  value={orderName}
-                  onChange={(e) => setOrderName(e.target.value)}
-                  className="rounded-lg border-gray-300"
-                />
+                <div className="relative">
+                  <FileText className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9087b1]" />
+                  <Input
+                    value={orderName}
+                    onChange={(event) => setOrderName(event.target.value)}
+                    placeholder="Enter order name"
+                    className="h-11 rounded-[14px] border-[#e8def7] bg-white pl-11 text-[0.92rem] text-[#30275d] shadow-none placeholder:text-[#aaa2c2] focus-visible:border-[#b89cff] focus-visible:ring-[#d8c6ff]/60"
+                  />
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Image quality
-                  </label>
+              <div className="space-y-2">
+                <label className="text-[0.82rem] font-semibold text-[#2a2156]">
+                  Image Quality
+                </label>
+                <div className="relative">
+                  <Diamond className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7a6df4]" />
                   <Select value={imageQuality} onValueChange={setImageQuality}>
-                    <SelectTrigger className="rounded-lg border-gray-300">
-                      <SelectValue />
+                    <SelectTrigger className="h-11 w-full rounded-[14px] border-[#e8def7] bg-white pl-11 pr-4 text-[0.92rem] text-[#30275d] shadow-none focus-visible:border-[#b89cff] focus-visible:ring-[#d8c6ff]/60">
+                      <SelectValue placeholder="Select quality" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="standard">
-                        Standard (1024x1024)
-                      </SelectItem>
-                      <SelectItem value="hd">HD (2048x1536)</SelectItem>
-                      <SelectItem value="ultra-hd">
-                        Ultra HD (2048x1536) - Best
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Personalization model
-                  </label>
-                  <Select
-                    value={personalizationModel}
-                    onValueChange={setPersonalizationModel}
-                  >
-                    <SelectTrigger className="rounded-lg border-gray-300">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="chatgpt-3">
-                        ChatGPT 3 (Good Quality)
-                      </SelectItem>
-                      <SelectItem value="chatgpt-4">
-                        ChatGPT 4 (Best Quality)
-                      </SelectItem>
+                    <SelectContent className="rounded-[14px] border-[#e8def7]">
+                      <SelectItem value="high">High (Recommended)</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="low">Low</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Coloring model
+              <div className="space-y-2">
+                <label className="text-[0.82rem] font-semibold text-[#2a2156]">
+                  Model Selection
                 </label>
-                <Select value={coloringModel} onValueChange={setColoringModel}>
-                  <SelectTrigger className="rounded-lg border-gray-300">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="flux-kortext">
-                      Flux Kortext Pro (Recommended)
-                    </SelectItem>
-                    <SelectItem value="stable-diffusion">
-                      Stable Diffusion
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="relative">
+                  <Crown className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#d4942b]" />
+                  <Select
+                    value={modelSelection}
+                    onValueChange={setModelSelection}
+                  >
+                    <SelectTrigger className="h-11 w-full rounded-[14px] border-[#e8def7] bg-white pl-11 pr-4 text-[0.92rem] text-[#30275d] shadow-none focus-visible:border-[#b89cff] focus-visible:ring-[#d8c6ff]/60">
+                      <SelectValue placeholder="Select model" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-[14px] border-[#e8def7]">
+                      <SelectItem value="premium">
+                        Premium (Best Quality)
+                      </SelectItem>
+                      <SelectItem value="standard">Standard</SelectItem>
+                      <SelectItem value="fast">Fast Draft</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
           </section>
 
-          {/* Upload Photos Section */}
-          <section className="mb-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-semibold text-sm">
-                2
+          <section className="mt-5">
+            <div className="mb-4 flex items-center gap-3 text-[#231951]">
+              <div className="flex h-8 w-8 items-center justify-center rounded-[10px] border border-[#d8c9fb] bg-[#f7f1ff] text-[#7044ee]">
+                <Upload className="h-4 w-4" />
               </div>
-              <h2 className="text-xl font-bold text-gray-900">Upload photos</h2>
+              <h2 className="text-[1.35rem] font-bold tracking-[-0.03em]">
+                Upload Photos
+              </h2>
             </div>
 
-            <p className="text-gray-600 text-sm mb-6">
-              Add kid and dog reference photos from your device or Google Drive.
-            </p>
-
-            <div className="grid grid-cols-4 gap-6">
-              {[
-                { key: "kidOne", label: "Kid one", required: true },
-                { key: "kidTwo", label: "Kid two", required: false },
-                { key: "dogOne", label: "Dog one", required: true },
-                { key: "dogTwo", label: "Dog two", required: false },
-              ].map((item) => (
-                <div
-                  key={item.key}
-                  className="bg-white rounded-2xl border-2 border-dashed border-gray-300 p-6 text-center hover:border-purple-400 hover:bg-purple-50 transition-all"
-                >
-                  <div className="mb-4 flex justify-center">
-                    <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-blue-100 rounded-full flex items-center justify-center">
-                      <Upload className="w-8 h-8 text-purple-600" />
-                    </div>
-                  </div>
-                  <h3 className="font-semibold text-gray-900 text-sm mb-1">
-                    {item.label}
-                  </h3>
-                  <p className="text-xs text-gray-600 mb-4">
-                    {item.required ? "Required" : "Optional"}
-                  </p>
-
-                  {uploadedFiles[item.key as keyof typeof uploadedFiles] ? (
-                    <div className="flex items-center justify-center gap-2 text-green-600 text-sm font-medium mb-3">
-                      <CheckCircle2 className="w-4 h-4" />
-                      Uploaded
-                    </div>
-                  ) : (
-                    <div className="space-y-2 mb-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full rounded-lg"
-                        onClick={() =>
-                          handleFileUpload(item.key as keyof typeof uploadedFiles)
-                        }
-                      >
-                        <Upload className="w-4 h-4 mr-1" />
-                        Upload
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="w-full rounded-lg"
-                      >
-                        <Cloud className="w-4 h-4 mr-1" />
-                        From Drive
-                      </Button>
-                    </div>
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+              {uploadCards.map((card) => (
+                <article
+                  key={card.id}
+                  className={cn(
+                    "rounded-[20px] border p-4 shadow-[0_10px_22px_rgba(74,53,141,0.04)]",
+                    card.cardClassName
                   )}
-                </div>
+                >
+                  <div className="mb-3 flex items-start justify-between">
+                    <h3 className="text-center text-[1rem] font-bold tracking-[-0.03em] text-[#241c53]">
+                      {card.label}
+                    </h3>
+                    <Info className="h-4 w-4 text-[#a39abe]" />
+                  </div>
+
+                  <div
+                    className={cn(
+                      "mx-auto flex h-28 w-28 items-end justify-center overflow-hidden rounded-full",
+                      card.avatarClassName
+                    )}
+                  >
+                    <img
+                      src={card.image}
+                      alt={card.label}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+
+                  <div className="mt-4 space-y-2">
+                    <Button
+                      variant="outline"
+                      className="h-10 w-full rounded-[12px] border-dashed border-[#ccb7ff] bg-white/75 text-[0.9rem] font-medium text-[#6f43ee] shadow-none hover:bg-[#f6f0ff]"
+                    >
+                      <Upload className="h-4 w-4" />
+                      Upload
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-10 w-full rounded-[12px] border-[#e6def7] bg-white/92 text-[0.9rem] font-medium text-[#3c315f] shadow-none hover:bg-[#faf7ff]"
+                    >
+                      <CloudUpload className="h-4 w-4 text-[#6f43ee]" />
+                      From Drive
+                    </Button>
+                  </div>
+                </article>
               ))}
             </div>
           </section>
 
-          {/* Reference Pages Section */}
-          <section className="mb-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-semibold text-sm">
-                3
+          <section className="mt-5">
+            <div className="mb-4 flex items-center gap-3 text-[#231951]">
+              <div className="flex h-8 w-8 items-center justify-center rounded-[10px] border border-[#d8c9fb] bg-[#f7f1ff] text-[#7044ee]">
+                <FileImage className="h-4 w-4" />
               </div>
-              <h2 className="text-xl font-bold text-gray-900">Reference pages</h2>
+              <h2 className="text-[1.35rem] font-bold tracking-[-0.03em]">
+                Reference Pages
+              </h2>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-gray-200">
-              <p className="text-gray-600 text-sm mb-4">
-                Select which book pages to generate in this run.
-              </p>
-              <Button
-                variant="outline"
-                className="rounded-lg border-purple-300 text-purple-600 hover:bg-purple-50"
-              >
-                Browse & select pages
-              </Button>
-              {referencePages === 0 && (
-                <p className="text-sm text-gray-500 mt-4">
-                  No pages selected — Click "Browse & select pages" above
-                </p>
-              )}
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
+              {referencePages.map((page) => (
+                <article
+                  key={page.id}
+                  className={cn(
+                    "relative aspect-[1.34] overflow-hidden rounded-[16px] border shadow-[0_8px_18px_rgba(72,51,140,0.06)]",
+                    page.className
+                  )}
+                >
+                  <button className="absolute right-2 top-2 z-10 flex h-7 w-7 items-center justify-center rounded-[10px] bg-white/92 text-[#5f567f] shadow-sm">
+                    <X className="h-4 w-4" />
+                  </button>
+                  <div className="absolute inset-x-0 bottom-0 top-0 flex items-end justify-center">
+                    <img
+                      src={page.image}
+                      alt="Reference page preview"
+                      className={page.imageClassName}
+                    />
+                  </div>
+                </article>
+              ))}
             </div>
+
+            <Button
+              variant="outline"
+              className="mt-4 h-10 rounded-[14px] border-dashed border-[#ccb7ff] bg-white/72 px-6 text-[0.9rem] font-medium text-[#6f43ee] shadow-none hover:bg-[#f7f1ff]"
+            >
+              <Plus className="h-4 w-4" />
+              Add More Pages
+            </Button>
           </section>
 
-          {/* Correction Notes Section */}
-          <section className="mb-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-semibold text-sm">
-                4
+          <section className="mt-5">
+            <div className="mb-4 flex items-center gap-3 text-[#231951]">
+              <div className="flex h-8 w-8 items-center justify-center rounded-[10px] border border-[#d8c9fb] bg-[#f7f1ff] text-[#7044ee]">
+                <NotebookPen className="h-4 w-4" />
               </div>
-              <h2 className="text-xl font-bold text-gray-900">Correction notes</h2>
+              <h2 className="text-[1.35rem] font-bold tracking-[-0.03em]">
+                Correction Notes
+              </h2>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-gray-200">
-              <p className="text-gray-600 text-sm mb-4">
-                Optional notes for the AI about specific adjustments.
-              </p>
+            <div className="rounded-[20px] border border-[#ebe5f8] bg-white/86 p-4 shadow-[0_12px_24px_rgba(60,45,110,0.04)]">
               <Textarea
-                placeholder="e.g. Make the dog look more fluffy, adjust kid's hair color..."
                 value={correctionNotes}
-                onChange={(e) => setCorrectionNotes(e.target.value)}
-                className="rounded-lg border-gray-300 min-h-24"
+                onChange={(event) => setCorrectionNotes(event.target.value)}
+                placeholder="Add any specific correction notes or instructions for the generation..."
+                className="min-h-[96px] resize-none rounded-[16px] border-[#e8def7] bg-white px-4 py-3 text-[0.92rem] text-[#30275d] shadow-none placeholder:text-[#aaa2c2] focus-visible:border-[#b89cff] focus-visible:ring-[#d8c6ff]/60"
               />
-              <p className="text-xs text-gray-500 mt-2">
+              <div className="mt-2 text-right text-[0.82rem] text-[#8279a1]">
                 {correctionNotes.length}/1000
-              </p>
+              </div>
             </div>
           </section>
 
-          {/* Generate Button */}
-          <div className="flex gap-4 mb-8">
+          <div className="mt-6 flex justify-center">
             <Button
               onClick={handleGenerateClick}
-              className="flex-1 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white rounded-xl py-6 text-base font-semibold shadow-lg shadow-purple-200"
+              className="h-12 w-full max-w-[360px] rounded-full bg-[linear-gradient(90deg,#6c43ef_0%,#9a5fff_100%)] text-[1rem] font-bold text-white shadow-[0_14px_28px_rgba(120,79,244,0.28)] hover:opacity-95"
             >
-              <Sparkles className="w-5 h-5 mr-2" />
-              Generate selected pages
+              Generate
+              <Sparkles className="h-5 w-5" />
             </Button>
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );

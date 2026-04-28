@@ -117,8 +117,24 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply h-full;
+  }
+  body,
+  #root {
+    @apply min-h-screen;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-family:
+      "Trebuchet MS",
+      "Segoe UI",
+      ui-sans-serif,
+      system-ui,
+      sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(187, 164, 255, 0.28), transparent 24%),
+      linear-gradient(135deg, #f7f2ff 0%, #fbfbff 42%, #fffdf7 100%);
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
@@ -158,6 +174,18 @@
   .flex {
     min-height: 0;
     min-width: 0;
+  }
+
+  .storybook-panel {
+    border-radius: 1.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(255, 255, 255, 0.78) 100%
+    );
+    box-shadow: 0 20px 70px rgba(110, 88, 209, 0.08);
+    backdrop-filter: blur(18px);
   }
 
   @media (min-width: 640px) {

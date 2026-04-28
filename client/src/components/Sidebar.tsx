@@ -1,73 +1,100 @@
-import { BookOpen, Plus, Image, LogOut, User } from "lucide-react";
+import sidebarImage from "@/assets/sidebar-image.webp";
+import { cn } from "@/lib/utils";
+import { BookOpen, ChevronDown, ImageIcon, Sparkles } from "lucide-react";
 import { useLocation } from "wouter";
-import { Button } from "@/components/ui/button";
 
 export default function Sidebar() {
   const [location, setLocation] = useLocation();
 
+  const navigationItems = [
+    {
+      href: "/",
+      label: "New Batch Run",
+      icon: Sparkles,
+      active: location === "/",
+    },
+    {
+      href: "/gallery",
+      label: "Gallery",
+      icon: ImageIcon,
+      active: location === "/gallery",
+    },
+  ];
+
   return (
-    <div className="w-64 bg-gradient-to-b from-purple-50 to-white border-r border-purple-100 flex flex-col min-h-screen">
-      {/* Logo Section */}
-      <div className="p-6 border-b border-purple-100">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
-            <BookOpen className="w-6 h-6 text-white" />
+    <aside className="w-full lg:max-w-[18rem] lg:min-w-[18rem]">
+      <div className="relative flex h-full min-h-[calc(100vh-1rem)] flex-col overflow-hidden rounded-[28px] border border-white/85 bg-white/82 p-4 shadow-[0_18px_56px_rgba(119,94,226,0.12)] backdrop-blur-xl lg:min-h-[calc(100vh-2rem)]">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(167,139,250,0.17),_transparent_33%),radial-gradient(circle_at_bottom_right,_rgba(244,114,182,0.08),_transparent_26%)]" />
+
+        <div className="relative flex items-center gap-3 px-2 pb-6 pt-1">
+          <div className="relative flex h-12 w-12 items-center justify-center rounded-[16px] bg-[linear-gradient(135deg,#8358ff_0%,#6f46ec_45%,#a56eff_100%)] text-white shadow-[0_12px_24px_rgba(122,83,242,0.28)]">
+            <BookOpen className="h-6 w-6" />
+            <span className="absolute -right-1 top-1 h-2 w-2 rounded-full bg-white/95" />
+            <span className="absolute left-1 top-0 h-2.5 w-2.5 rounded-full bg-[#ffd98a]" />
           </div>
           <div>
-            <h1 className="font-bold text-gray-900 text-sm">Kids Book</h1>
-            <p className="text-xs text-purple-600 font-medium">Automation</p>
+            <h1 className="text-[1.72rem] font-extrabold leading-none tracking-[-0.04em] text-[#20154f]">
+              Kids Book
+            </h1>
+            <p className="mt-1 text-[0.95rem] font-semibold leading-none text-[#7447ef]">
+              Automation
+            </p>
           </div>
         </div>
-      </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-2">
-        {/* New Batch Run */}
-        <button
-          onClick={() => setLocation("/")}
-          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
-            location === "/"
-              ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-200"
-              : "text-gray-700 hover:bg-purple-100"
-          }`}
-        >
-          <Plus className="w-5 h-5" />
-          <span className="font-medium text-sm">New batch run</span>
-        </button>
+        <nav className="relative mt-1 space-y-3">
+          {navigationItems.map((item) => {
+            const Icon = item.icon;
 
-        {/* Gallery */}
-        <button
-          onClick={() => setLocation("/gallery")}
-          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
-            location === "/gallery"
-              ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-200"
-              : "text-gray-700 hover:bg-purple-100"
-          }`}
-        >
-          <Image className="w-5 h-5" />
-          <span className="font-medium text-sm">Gallery</span>
-        </button>
-      </nav>
+            return (
+              <button
+                key={item.href}
+                onClick={() => setLocation(item.href)}
+                className={cn(
+                  "flex w-full items-center gap-3 rounded-[16px] border px-4 py-3.5 text-left text-[0.97rem] font-semibold transition-all duration-200",
+                  item.active
+                    ? "border-transparent bg-[linear-gradient(90deg,#7346f3_0%,#985cff_100%)] text-white shadow-[0_14px_28px_rgba(120,79,244,0.28)]"
+                    : "border-[#ede7f8] bg-white/84 text-[#241a59] shadow-[0_8px_18px_rgba(51,40,99,0.04)] hover:-translate-y-0.5 hover:border-[#dccfff] hover:bg-[#fbf8ff]"
+                )}
+              >
+                <Icon className="h-[18px] w-[18px]" />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </nav>
 
-      {/* User Section */}
-      <div className="p-4 border-t border-purple-100 space-y-2">
-        <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-purple-100">
-          <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center">
-            <User className="w-4 h-4 text-white" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">Admin User</p>
-            <p className="text-xs text-gray-600 truncate">admin@example.com</p>
-          </div>
+        <div className="relative mt-4 flex flex-1 flex-col overflow-hidden rounded-[24px]">
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(236,239,255,0.62)_45%,rgba(224,230,255,0.9)_100%)]" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[74%] rounded-[26px] bg-[radial-gradient(circle_at_25%_28%,rgba(204,220,255,0.92),transparent_26%),radial-gradient(circle_at_72%_76%,rgba(255,229,173,0.32),transparent_16%),linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(226,231,255,0.82)_52%,rgba(214,222,255,0.96)_100%)]" />
+          <div className="pointer-events-none absolute inset-x-[-1rem] bottom-4 h-48 rounded-full bg-[radial-gradient(circle,rgba(196,204,255,0.42),transparent_68%)] blur-2xl" />
+          <span className="absolute left-4 top-[12.7rem] h-1.5 w-1.5 rounded-full bg-[#ffd870]" />
+          <span className="absolute left-8 top-[13.4rem] h-2 w-2 rounded-full bg-[#ffc9dd]" />
+          <span className="absolute right-7 top-[13rem] h-2.5 w-2.5 rounded-full bg-[#ffcf6d]" />
+          <span className="absolute right-12 top-[15rem] h-1.5 w-1.5 rounded-full bg-[#d9a7ff]" />
+          <span className="absolute right-5 bottom-24 h-2 w-2 rounded-full bg-[#f8b2d0]" />
+          <img
+            src={sidebarImage}
+            alt="Child reading with a dog"
+            className="relative mt-auto h-auto w-full object-cover object-bottom [mask-image:linear-gradient(to_top,black_72%,transparent_100%)]"
+          />
         </div>
-        <Button
-          variant="ghost"
-          className="w-full justify-start gap-2 text-gray-600 hover:text-gray-900 hover:bg-purple-100"
-        >
-          <LogOut className="w-4 h-4" />
-          <span className="text-sm">Logout</span>
-        </Button>
+
+        <div className="relative mt-4 flex items-center gap-3 rounded-[18px] border border-[#e9e1fb] bg-white/90 px-4 py-3.5 shadow-[0_10px_22px_rgba(81,57,155,0.06)]">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[linear-gradient(135deg,#7346f3_0%,#965dff_100%)] text-base font-bold text-white shadow-[0_10px_22px_rgba(120,79,244,0.24)]">
+            A
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[0.92rem] font-bold text-[#1e1748]">
+              Admin User
+            </p>
+            <p className="truncate text-[0.82rem] text-[#756c97]">
+              admin@example.com
+            </p>
+          </div>
+          <ChevronDown className="h-4 w-4 text-[#5f5588]" />
+        </div>
       </div>
-    </div>
+    </aside>
   );
 }
