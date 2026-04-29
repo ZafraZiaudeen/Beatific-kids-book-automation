@@ -1,10 +1,13 @@
 import sidebarImage from "@/assets/sidebar-image.webp";
+import { useAppSession } from "@/contexts/AppSessionContext";
 import { cn } from "@/lib/utils";
-import { BookOpen, ChevronDown, ImageIcon, Sparkles } from "lucide-react";
+import { UserButton } from "@clerk/clerk-react";
+import { BookOpen, FolderOpen, Sparkles, Users } from "lucide-react";
 import { useLocation } from "wouter";
 
 export default function Sidebar() {
   const [location, setLocation] = useLocation();
+  const { appUser } = useAppSession();
 
   const navigationItems = [
     {
@@ -14,11 +17,21 @@ export default function Sidebar() {
       active: location === "/",
     },
     {
-      href: "/gallery",
-      label: "Gallery",
-      icon: ImageIcon,
-      active: location === "/gallery",
+      href: "/runs",
+      label: "Runs",
+      icon: FolderOpen,
+      active: location.startsWith("/runs"),
     },
+    ...(appUser?.role === "admin"
+      ? [
+          {
+            href: "/team",
+            label: "Team",
+            icon: Users,
+            active: location.startsWith("/team"),
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -81,18 +94,18 @@ export default function Sidebar() {
         </div>
 
         <div className="relative mt-4 flex items-center gap-3 rounded-[18px] border border-[#e9e1fb] bg-white/90 px-4 py-3.5 shadow-[0_10px_22px_rgba(81,57,155,0.06)]">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[linear-gradient(135deg,#7346f3_0%,#965dff_100%)] text-base font-bold text-white shadow-[0_10px_22px_rgba(120,79,244,0.24)]">
-            A
-          </div>
+          <UserButton />
           <div className="min-w-0 flex-1">
             <p className="truncate text-[0.92rem] font-bold text-[#1e1748]">
-              Admin User
+              {appUser?.fullName || "Loading user"}
             </p>
             <p className="truncate text-[0.82rem] text-[#756c97]">
-              admin@example.com
+              {appUser?.email || ""}
             </p>
           </div>
-          <ChevronDown className="h-4 w-4 text-[#5f5588]" />
+          <span className="rounded-full bg-[#f3edff] px-2 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-[#6f43ee]">
+            {appUser?.role || "member"}
+          </span>
         </div>
       </div>
     </aside>

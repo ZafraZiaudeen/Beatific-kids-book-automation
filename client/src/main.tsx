@@ -1,5 +1,7 @@
+import { ClerkProvider } from "@clerk/clerk-react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import { AppSessionProvider } from "./contexts/AppSessionContext";
 import "./index.css";
 
 function setupAnalytics() {
@@ -25,4 +27,16 @@ function setupAnalytics() {
 
 setupAnalytics();
 
-createRoot(document.getElementById("root")!).render(<App />);
+const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!publishableKey) {
+  throw new Error("VITE_CLERK_PUBLISHABLE_KEY is required");
+}
+
+createRoot(document.getElementById("root")!).render(
+  <ClerkProvider publishableKey={publishableKey}>
+    <AppSessionProvider>
+      <App />
+    </AppSessionProvider>
+  </ClerkProvider>,
+);
