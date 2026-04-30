@@ -1,4 +1,5 @@
 import AppShell from "@/components/AppShell";
+import AuthImage from "@/components/AuthImage";
 import DriveFileBrowser from "@/components/DriveFileBrowser";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { apiRequest, resolveApiUrl } from "@/lib/api";
+import { apiRequest } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import type { BatchRun, DriveBrowserFile, ReferencePage, SourceAsset } from "@/types/app";
 import {
@@ -313,8 +314,8 @@ export default function NewBatchRun() {
                   )}
                 >
                   {asset?.previewUrl ? (
-                    <img
-                      src={resolveApiUrl(asset.previewUrl)}
+                    <AuthImage
+                      src={asset.previewUrl}
                       alt={slot.label}
                       className="h-full w-full object-cover"
                     />
@@ -399,8 +400,8 @@ export default function NewBatchRun() {
                   <X className="h-4 w-4" />
                 </button>
                 <div className="flex h-full w-full items-center justify-center overflow-hidden">
-                  <img
-                    src={resolveApiUrl(page.previewUrl)}
+                  <AuthImage
+                    src={page.previewUrl}
                     alt={page.name}
                     className="h-full w-full object-cover"
                   />

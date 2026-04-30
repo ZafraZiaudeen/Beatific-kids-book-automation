@@ -8,7 +8,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { apiRequest, resolveApiUrl } from "@/lib/api";
+import AuthImage from "@/components/AuthImage";
+import { apiRequest } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import type { DriveBrowserFile, DriveBrowserResponse } from "@/types/app";
 import { ChevronLeft, Folder, Loader2, Search } from "lucide-react";
@@ -214,8 +215,8 @@ export default function DriveFileBrowser({
                     )}
                   >
                     <div className="aspect-[0.78] overflow-hidden bg-[#f5f1ff]">
-                      <img
-                        src={resolveApiUrl(file.previewUrl)}
+                      <AuthImage
+                        src={file.previewUrl}
                         alt={file.name}
                         className="h-full w-full object-cover"
                       />

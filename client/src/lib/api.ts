@@ -20,6 +20,22 @@ export function resolveApiUrl(path: string) {
   return `${API_BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+export async function apiFetch(path: string, init: RequestInit = {}) {
+  const headers = new Headers(init.headers || {});
+
+  if (tokenProvider) {
+    const token = await tokenProvider();
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+  }
+
+  return fetch(resolveApiUrl(path), {
+    ...init,
+    headers,
+  });
+}
+
 export async function apiRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
   const headers = new Headers(init.headers || {});
   headers.set("Accept", "application/json");

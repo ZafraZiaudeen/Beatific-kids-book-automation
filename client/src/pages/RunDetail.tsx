@@ -1,7 +1,8 @@
 import AppShell from "@/components/AppShell";
+import AuthImage from "@/components/AuthImage";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { apiRequest, resolveApiUrl } from "@/lib/api";
+import { apiRequest } from "@/lib/api";
 import type { BatchRun } from "@/types/app";
 import { ArrowLeft, Loader2, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -212,7 +213,7 @@ function PreviewCard({ title, subtitle, image }: { title: string; subtitle: stri
     <div className="overflow-hidden rounded-[20px] border border-[#ece6fb] bg-white">
       <div className="aspect-[0.8] bg-[#f5f1ff]">
         {image ? (
-          <img src={resolveApiUrl(image)} alt={title} className="h-full w-full object-cover" />
+          <AuthImage src={image} alt={title} className="h-full w-full object-cover" />
         ) : null}
       </div>
       <div className="p-3">
@@ -228,7 +229,7 @@ function VariantCard({ title, image }: { title: string; image?: string }) {
     <div className="overflow-hidden rounded-[18px] border border-[#ece6fb] bg-[#fcfbff]">
       <div className="aspect-[0.8] bg-[#f5f1ff]">
         {image ? (
-          <img src={resolveApiUrl(image)} alt={title} className="h-full w-full object-cover" />
+          <AuthImage src={image} alt={title} className="h-full w-full object-cover" />
         ) : null}
       </div>
       <div className="p-3">

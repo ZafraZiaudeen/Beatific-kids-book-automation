@@ -1,8 +1,9 @@
 import AppShell from "@/components/AppShell";
+import AuthImage from "@/components/AuthImage";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppSession } from "@/contexts/AppSessionContext";
-import { apiRequest, resolveApiUrl } from "@/lib/api";
+import { apiRequest } from "@/lib/api";
 import type { BatchRun } from "@/types/app";
 import { ArrowRight, RefreshCcw } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -83,8 +84,8 @@ export default function RunsListPage() {
               <div className="grid md:grid-cols-[200px_1fr]">
                 <div className="aspect-[0.92] bg-[#f5f1ff]">
                   {preview ? (
-                    <img
-                      src={resolveApiUrl(preview)}
+                    <AuthImage
+                      src={preview}
                       alt={run.orderLabel}
                       className="h-full w-full object-cover"
                     />
